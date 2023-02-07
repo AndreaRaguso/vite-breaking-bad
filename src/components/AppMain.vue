@@ -45,7 +45,7 @@ export default {
             <select class="form-select" aria-label="Default select example" v-model="selectedOption" @change="onchange" >
                 <option selected>Seleziona...</option>
                 <option v-for="(archetype, index) in archetypes" :value="archetype.archetype_name" :key="index">{{ archetype.archetype_name }}</option>
-             </select>
+            </select>
         </div>
 
         <div class="bg-white">
