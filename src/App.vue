@@ -2,6 +2,7 @@
 import axios from 'axios';
 import AppHeader from './components/AppHeader.vue';
 import AppMain from './components/AppMain.vue';
+import { store } from './store.js';
 
 
 export default {
@@ -14,7 +15,8 @@ export default {
         return {
             card: [],
             choose: 'Alien',
-            link: ''
+            link: '',
+            store
         }
   },
   created() {
@@ -22,7 +24,7 @@ export default {
         axios
             .get(this.link)
             .then((response) => {
-                this.card = response.data.data.slice(0,24)
+                this.store.card = response.data.data.slice(0,24)
                 
             });
   },
@@ -33,7 +35,7 @@ export default {
 <template>
 
   <AppHeader/>
-  <AppMain :cardList="card"/>
+  <AppMain/>
 
 </template>
 

@@ -1,6 +1,6 @@
 <script>
 import axios from 'axios';
-
+import { store } from '../store.js';
 
 export default {
     name: 'AppMain',
@@ -8,19 +8,12 @@ export default {
         return{
             archetypes: [],
             link: '',
-            selectedOption: ''
+            selectedOption: null,
+            store
         }
-    },
-    props:{
-        cardList:{
-            type: Array,
-            default: []
-        },
     },
     methods:{
-        ciao(value){
-            console.log("pio",value)
-        }
+    
     },
     created() {
     this.link = "https://db.ygoprodeck.com/api/v7/archetypes.php"
@@ -29,7 +22,17 @@ export default {
             .then((response) => {
                 this.archetypes = response.data
             });
-  },
+    },
+    computed:{
+        onchange() {
+            axios
+                .get("https://db.ygoprodeck.com/api/v7/cardinfo.php?archetype=" + this.selectedOption)
+                .then((response) => {
+                    this.store.card = response.data.data.slice(0,24)
+                    
+                });
+        }
+    }
     
   }
 </script>
@@ -39,7 +42,7 @@ export default {
     <div class="container ">
 
         <div class="col-2 my-3">
-            <select class="form-select" aria-label="Default select example" v-model="selectedOption">
+            <select class="form-select" aria-label="Default select example" v-model="selectedOption" @change="onchange" >
                 <option selected>Seleziona...</option>
                 <option v-for="(archetype, index) in archetypes" :value="archetype.archetype_name" :key="index">{{ archetype.archetype_name }}</option>
              </select>
@@ -49,11 +52,11 @@ export default {
 
             <div class="container py-5">
                 <div class="bg-dark py-2">
-                    <strong class="text-white mx-3">Found {{ cardList.length }} cards</strong> 
+                    <strong class="text-white mx-3">Found {{ store.card.length }} cards</strong> 
                 </div>
                 <div >
                     <div class="row">
-                        <div class="col-2 mb-4" v-for="card in cardList">
+                        <div class="col-2 mb-4" v-for="card in store.card">
                             <div>
                                 <img :src= "card.card_images[0].image_url" alt="" class=" img-fluid">
                             </div>
