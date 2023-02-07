@@ -12,17 +12,20 @@ export default {
   },
   data() {
         return {
-            card: []
+            card: [],
+            choose: 'Alien',
+            link: ''
         }
-  },  
+  },
   created() {
+    this.link = "https://db.ygoprodeck.com/api/v7/cardinfo.php"
         axios
-            .get('https://db.ygoprodeck.com/api/v7/cardinfo.php?archetype=Alien')
+            .get(this.link)
             .then((response) => {
-                this.card = response.data.data.slice(0,20)
+                this.card = response.data.data.slice(0,24)
                 
             });
-    }
+  },
 }
 
 </script>

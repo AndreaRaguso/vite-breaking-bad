@@ -1,14 +1,37 @@
 <script>
+import axios from 'axios';
+
+
 export default {
     name: 'AppMain',
+    data(){
+        return{
+            archetypes: [],
+            link: '',
+            selectedOption: ''
+        }
+    },
     props:{
         cardList:{
             type: Array,
             default: []
+        },
+    },
+    methods:{
+        ciao(value){
+            console.log("pio",value)
         }
-    }
+    },
+    created() {
+    this.link = "https://db.ygoprodeck.com/api/v7/archetypes.php"
+        axios
+            .get(this.link)
+            .then((response) => {
+                this.archetypes = response.data
+            });
+  },
     
-}
+  }
 </script>
 
 <template>
@@ -16,12 +39,10 @@ export default {
     <div class="container ">
 
         <div class="col-2 my-3">
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Seleziona..</option>
-                <option value="1">Alien</option>
-                <option value="2">Melodious</option>
-                <option value="3">Archfiend</option>
-            </select>
+            <select class="form-select" aria-label="Default select example" v-model="selectedOption">
+                <option selected>Seleziona...</option>
+                <option v-for="(archetype, index) in archetypes" :value="archetype.archetype_name" :key="index">{{ archetype.archetype_name }}</option>
+             </select>
         </div>
 
         <div class="bg-white">
@@ -36,7 +57,7 @@ export default {
                             <div>
                                 <img :src= "card.card_images[0].image_url" alt="" class=" img-fluid">
                             </div>
-                            <div class="info p-3">
+                            <div class="info p-3 d-flex flex-column  justify-content-between">
                                 <h3 class="text-white"> {{ card.name }}</h3>
                                 <h4 class="text-center">{{card.archetype}}</h4>
                             </div>
