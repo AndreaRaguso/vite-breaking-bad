@@ -21,11 +21,12 @@ export default {
   },
   created() {
     this.link = "https://db.ygoprodeck.com/api/v7/cardinfo.php"
+    this.store.loading = true;
         axios
             .get(this.link)
             .then((response) => {
                 this.store.card = response.data.data.slice(0,24)
-                
+                this.store.loading = false;
             });
   },
 }
